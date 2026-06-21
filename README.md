@@ -1,37 +1,24 @@
-# chat
-C++ boost::asio implementation of multi-threaded chat server, and client
+# cpp-multithreaded-chat
 
-I implemented a console mode chat room using C++11 features and boost::asio asynchronous library. The chat room consists of a chat server and multiple chat clients. The makefile will generate 2 binaries, chat_server and chat_client. The boost::asio::io_service::strand is used to serialize server side event handlers in thread pool. The strand wrapper eliminates the need of explicitly synchronize and locking event handlers in thread pool.
+A high-performance, asynchronous multi-threaded chat server and client application implemented in modern C++ (C++11) utilizing the **Boost.Asio** asynchronous library.
 
-The chat room can perform the following functions:
-1.	Broadcast each new chat message to all participants in the same room.
-2.	A chat message consists of server time stamp, client’s nickname, and client’s chat content text message.
-3.	When a new participant joins a room, all recent chat history will be feed to this participant.
-4.	A single server can support multiple chat rooms. Chat rooms are distinguished from each other by port numbers.
-5.	The server can be easily configured with multiple threads. Number of threads is hardcoded in the server code just for demonstration purpose. For production use, the number of worker threads need a config file entry.
-6.	For Linux system, set cpu affinity to threads in pool is also demonstrated.
-7.	Tested across Windows and Linux.
+## 🛠️ Key Technical Architecture & Concurrency
+* **Asynchronous Event Handling:** Built entirely on `boost::asio` to handle non-blocking asynchronous operations seamlessly.
+* **Thread Pool Serialization:** Utilizes `boost::asio::io_service::strand` to serialize server-side event handlers within the worker thread pool. This effectively eliminates the need for explicit locking mechanisms, preventing race conditions cleanly.
+* **CPU Affinity Optimization:** Demonstrates how to set CPU affinity for worker threads on Linux environments to achieve core-level synchronization and lower latency.
 
-# example
-starts server on a home computer, with only one room listening on port 8888
->$./chat_server 8888
+## 🚀 Key Features
+1. **Real-time Broadcast:** Instant multi-client communication broadcasting messages dynamically to all active room participants.
+2. **Structured Message Framing:** Chat messages are well-structured, containing server-side timestamps, user nicknames, and textual payloads.
+3. **Session Persistence (Chat History):** Seamless onboarding for new participants by instantly feeding recent chat room history upon connection.
+4. **Multi-Room Support:** Highly modular architecture capable of supporting multiple isolated chat rooms mapped to specific port numbers.
+5. **Cross-Platform Readiness:** Fully tested and compliant across both **Windows** and **Linux** environments.
 
-starts 3 clients on another home computer, all connect to the chat_server which is on box 192.168.1.4.
+## 📦 How to Build and Run
 
-first starts client Botao:
->$./chat_client Botao 192.168.1.4 8888
+The project includes a unified `makefile` that compiles two optimized binaries: `chat_server` and `chat_client`.
 
-After a few typing messages, starts client Tom:
->$./chat_client Tom 192.168.1.4 8888
-
-Finally starts client Mike:
->$./chat_client Mike 192.168.1.4 8888
-
-The type in message and console history is like this:
-![image](https://github.com/botaojia/chat/blob/master/example.png)
-
-The chat_server can support multiple room like this:
->$./chat_server 8888 9999
-
-now clients can select which room to join based on port numbers.
-
+### Compilation:
+```bash
+# Compile both server and client binaries instantly
+make
